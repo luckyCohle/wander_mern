@@ -1,0 +1,56 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+    <h2>edit your listing</h2>
+<div class="row">
+    <div class="col-8 offset-2">
+        <form method="post" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation"  enctype="multipart/form-data">
+        <div>
+            <label for="title" class="form-label">Title</label>
+            <input name="listing[title]" type="text" value="<%= listing.title %>" class="form-control" placeholder="enter title" required>
+            <div class="invalid-feedback">enter a valid title</div>
+            
+        </div>
+        <br><br>
+       <div>
+        <label for="description" class="form-label">Description</label>
+        <textarea name="listing[description]"   cols="10" rows="5" class="form-control" placeholder="description" required><%= listing.description %></textarea>
+        <div class="invalid-feedback">enter a short description</div>
+       </div>
+        <br><br>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="price" class="form-label">Price</label>
+                <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" placeholder="enter price" required> 
+                <div class="invalid-feedback">enter a valid price</div>
+               </div>
+               <div class="col-md-8">
+                <label for="country" class="form-label">country</label>
+                <input name="listing[country]" type="text" value="<%= listing.country %>" class="form-control" placeholder="enter country name" required>
+                <div class="invalid-feedback">enter a vlaid country name</div>
+            </div>
+        </div>
+       
+        <br><br>
+        <div class="mb-3">
+            orignal listing image <br>
+            <img src="<%= originalImageUrl%>" alt="">
+        </div>
+        <div>
+            <label for="image" class="form-label">Upload new Image</label>
+            <input name="listing[image]" type="file" value="<%= listing.image  %>" class="form-control" >
+        </div>
+        <br><br>
+        <div>
+            <label for="location" class="form-label">location</label>
+            <input name="listing[location]" type="text" value="<%= listing.location %>" class="form-control" placeholder="enter location" required>
+            <div class="invalid-feedback">enter a valid location</div>
+        </div>
+        <br><br>
+        
+        <br><br>
+        <button class="btn btn-dark edit-btn">edit</button>
+    </form>
+    </div>
+</div>
+</body>
+

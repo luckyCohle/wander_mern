@@ -26,7 +26,9 @@ async function forwardGeocode(query) {
 
 module.exports.index = async(req,res)=>{
     const allListings = await Listing.find({});
-    res.render("listings/index.ejs",{allListings});
+    const query = '';
+    
+    res.render("listings/index.ejs",{allListings,query});
 };
 
 module.exports.renderNewForm =async(req,res)=>{
@@ -67,6 +69,46 @@ module.exports.createListing = async (req, res, next) => {
 
     res.redirect("/listings");
 };
+  // Atlas Search
+  module.exports.searchListing = async (req, res) => {
+    const { query } = req.query;
+
+    try {
+        if (!query) {
+            console.log("querry is required");
+            res.redirect("/listings")
+        }
+
+        const results = await Listing.aggregate([
+            {
+                $search: {
+                    index: "listing_index", // Replace with your search index name
+                    text: {
+                        query: query,
+                        path: {
+                            wildcard: "*"
+                        }
+                    }
+                }
+            },
+            {
+                $limit: 10 // Limit the results
+            }
+        ]);
+        const filteredListings = await Listing.find({ $text: { $search: query } });
+        res.render("listings/searchResult.ejs", { filteredListings, query });
+
+    
+    } catch (error) {
+        console.error('Error performing search:', error);
+        req.flash("error", error.message); // Flash error message
+        res.status(400).send(error.message); // Send error response
+    }
+};
+
+
+
+
      module.exports.renderEditForm =async(req,res)=>{let {id}=req.params;
      const listing = await Listing.findById(id);
      if(!listing){

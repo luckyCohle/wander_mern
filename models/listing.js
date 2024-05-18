@@ -29,6 +29,10 @@ const listingSchema = new mongoose.Schema({
     }
 });
 
+// Create a text index on title and description fields
+listingSchema.index({ title: 'text', description: 'text' });
+
+
 listingSchema.post("findOneAndDelete",async(listing)=>{
     if(listing){
         await Review.deleteMany({_id:{$in: listing.reviews}})
